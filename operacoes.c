@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
 
     matriz = iniciar(numLinhas,numColunas);
     gerarMatriz(matriz,numLinhas,numColunas);
+    print_matriz(matriz,numLinhas,numColunas);
     realizar_operacoes(matriz, numLinhas,numColunas);
 
     // Impressão do maior elemento da matriz

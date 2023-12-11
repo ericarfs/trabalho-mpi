@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "matriz.h"
 
@@ -19,9 +20,9 @@ int main( int argc, char **argv ){
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   MPI_Comm_size( MPI_COMM_WORLD, &size );
 
-  printf("size: %d\n",size);
-
   rec_size=(numLinhas*numColunas)/size;
+
+  printf("%d\n", rec_size);
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
   if(rank == root) {
@@ -29,6 +30,13 @@ int main( int argc, char **argv ){
         for (j = 0; j < numColunas; j++) {
           matriz[i][j] = numColunas*numLinhas/(numColunas+numLinhas+16) + rand()%16;
         }
+    }
+
+    for (i = 0; i < numLinhas; i++) {
+        for (j = 0; j < numColunas; j++) {
+          printf("%d ",matriz[i][j]);
+        }
+        printf("\n");
     }
 
     /**for(i=0;i<numLinhas;i++){
@@ -43,10 +51,7 @@ int main( int argc, char **argv ){
 
   int local_min = vetor_rec[0];
   int local_max = vetor_rec[0];
-  int current_rank;
 
-  MPI_Comm_rank( MPI_COMM_WORLD, &current_rank );
-  printf("current: %d\n", current_rank);
     
   for (int i = 0; i < rec_size; i++){
       local_sum += vetor_rec[i];
@@ -68,7 +73,7 @@ int main( int argc, char **argv ){
     printf("Rank :%d recebeu %d \n",rank, vetor_rec[i]);
   }
 
-  MPI_Barrier(MPI_COMM_WORLD);
+  //MPI_Barrier(MPI_COMM_WORLD);
 
   MPI_Reduce(&local_sum, &global_sum, 1, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, root, MPI_COMM_WORLD);
