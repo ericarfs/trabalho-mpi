@@ -13,6 +13,7 @@ int main( int argc, char **argv ){
   int numColunas = atoi(argv[2]);
 
   int matriz[numLinhas][numColunas];
+  int matriz_transp[numLinhas][numColunas];
   int rank, size,rec_size, i, j,*vetor_rec, root=0;
   int global_min, global_max, local_sum = 0, global_sum = 0;
    
@@ -29,12 +30,22 @@ int main( int argc, char **argv ){
     for (i = 0; i < numLinhas; i++) {
         for (j = 0; j < numColunas; j++) {
           matriz[i][j] = numColunas*numLinhas/(numColunas+numLinhas+16) + rand()%16;
+          matriz_transp[j][i] = matriz[i][j];
         }
     }
 
     for (i = 0; i < numLinhas; i++) {
         for (j = 0; j < numColunas; j++) {
           printf("%d ",matriz[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+
+    for (i = 0; i < numLinhas; i++) {
+        for (j = 0; j < numColunas; j++) {
+          printf("%d ",matriz_transp[i][j]);
         }
         printf("\n");
     }

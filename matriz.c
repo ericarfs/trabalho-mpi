@@ -17,22 +17,22 @@ matriz_t *iniciar(int linhas, int cols){
 
 
 // Função para ler os elementos da matriz
-void gerarMatriz(matriz_t *m, int linhas, int cols) {
+void gerarMatriz(int **matriz, int linhas, int cols) {
     int i, j;        
     for (i = 0; i < linhas; i++) {
         for (j = 0; j < cols; j++) {
-            m->matriz[i][j] = cols*linhas/(cols+linhas+16) + rand()%16;
+            matriz[i][j] = cols*linhas/(cols+linhas+16) + rand()%16;
         }
     }
 }
 
 // Função para imprimir os elementos da matriz
-void print_matriz(matriz_t *m, int linhas, int cols) {
+void print_matriz(int **matriz, int linhas, int cols) {
   int i, j;
 
     for (i = 0; i < linhas; i++) {
         for (j = 0; j < cols; j++) {
-            printf("%d ", m->matriz[i][j]);
+            printf("%d ", matriz[i][j]);
         }
         printf("\n");
     }

@@ -14,8 +14,8 @@ typedef struct {
 }matriz_t; 
 
 matriz_t *iniciar(int linhas, int cols);
-void gerarMatriz(matriz_t *m, int linhas, int cols);
-void print_matriz(matriz_t *m, int linhas, int cols);
+void gerarMatriz(int **matriz, int linhas, int cols);
+void print_matriz(int **matriz, int linhas, int cols);
 void maior_menor_elemento(matriz_t *m, int linhas, int cols);
 void soma_total(matriz_t *m, int linhas, int cols);
 void soma_linhas(matriz_t *m, int linhas, int cols);
