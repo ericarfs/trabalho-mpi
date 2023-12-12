@@ -14,17 +14,8 @@ int main(int argc, char *argv[]) {
 
     matriz = iniciar(numLinhas,numColunas);
     gerarMatriz(matriz->matriz,numLinhas,numColunas);
-    print_matriz(matriz->matriz,numLinhas,numColunas);
+
     realizar_operacoes(matriz, numLinhas,numColunas);
-
-    // Impressão do maior elemento da matriz
-    printf("O maior elemento da matriz é: %d\n", matriz->maiorElemento);
-
-    // Impressão do menor elemento da matriz
-    printf("O menor elemento da matriz é: %d\n", matriz->menorElemento);
-
-    // Impressão da soma de todos os elementos da matriz
-    printf("A soma de todos os elementos da matriz é: %d\n", matriz->somaElementos);
 
     // Impressão da soma dos elementos de cada linha da matriz
     for (int i = 0; i < numLinhas; i++) {
@@ -35,6 +26,16 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < numColunas; i++) {
         printf("A soma dos elementos da coluna %d é: %d\n", i, matriz->somaColunas[i]);
     }
+
+
+    // Impressão do maior elemento da matriz
+    printf("O maior elemento da matriz é: %d\n", matriz->maiorElemento);
+
+    // Impressão do menor elemento da matriz
+    printf("O menor elemento da matriz é: %d\n", matriz->menorElemento);
+
+    // Impressão da soma de todos os elementos da matriz
+    printf("A soma de todos os elementos da matriz é: %d\n", matriz->somaElementos);
 
     freeMatriz(matriz,numLinhas,numColunas);
 
