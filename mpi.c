@@ -15,7 +15,7 @@ int main( int argc, char **argv ){
 
   int matriz[numLinhas][numColunas];
   int i, j, k;
-  int qtd_elem, rank, size,rec_size,*vetor_rec, root=0;
+  int qtd_elem, rank, size,rec_size=0,*vetor_rec, root=0;
   int global_min, global_max, local_sum = 0, global_sum = 0;
   int local_sum_rows[numLinhas];
   int global_sum_cols[numColunas];
@@ -25,6 +25,10 @@ int main( int argc, char **argv ){
   int *send_counts, *displs;
   int sum = 0;
 
+  double start, end; 
+
+  start = MPI_Wtime(); 
+
   MPI_Init( &argc, &argv );
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -33,7 +37,7 @@ int main( int argc, char **argv ){
 
   qtd_elem = numLinhas*numColunas;
 
-  rec_size = 100;
+  //rec_size = 100;
 
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
@@ -130,7 +134,7 @@ int main( int argc, char **argv ){
 
   }
   
- MPI_Barrier(MPI_COMM_WORLD);
+ //MPI_Barrier(MPI_COMM_WORLD);
 
 
   for (i=0;i<rows;i++){
@@ -153,7 +157,7 @@ int main( int argc, char **argv ){
   MPI_Reduce(&local_max, &global_max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
 
 
-  MPI_Barrier(MPI_COMM_WORLD);
+  //MPI_Barrier(MPI_COMM_WORLD);
 
  
 
@@ -174,7 +178,10 @@ int main( int argc, char **argv ){
   free(vetor_rec);
   free(send_counts);
   free(displs);
+  
+  end = MPI_Wtime(); 
   MPI_Finalize();
 
-    
+  
+  printf( "Elapsed time is %f\n", end - start); 
 }

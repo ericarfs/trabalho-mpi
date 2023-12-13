@@ -1,14 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <mpi.h>
 
 #include "matriz.h"
 
 
 // Função principal
 int main(int argc, char *argv[]) {
+    
     int numLinhas = atoi(argv[1]);
     int numColunas = atoi(argv[2]);
 
+
+    double start, end; 
+
+    start = MPI_Wtime(); 
     // Leitura dos elementos da matriz
     matriz_t *matriz;
 
@@ -38,6 +44,11 @@ int main(int argc, char *argv[]) {
     printf("A soma de todos os elementos da matriz é: %d\n", matriz->somaElementos);
 
     freeMatriz(matriz,numLinhas,numColunas);
+
+
+    end = MPI_Wtime(); 
+
+    printf( "Elapsed time is %f\n", end - start); 
 
     return 0;
 }
