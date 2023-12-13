@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "matriz.h": "c"
+        "matriz.h": "c",
+        "type_traits": "c"
     }
 }
