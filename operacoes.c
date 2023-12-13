@@ -13,8 +13,8 @@ int main(int argc, char *argv[]) {
     matriz_t *matriz;
 
     matriz = iniciar(numLinhas,numColunas);
+    
     gerarMatriz(matriz->matriz,numLinhas,numColunas);
-
     realizar_operacoes(matriz, numLinhas,numColunas);
 
     // Impressão da soma dos elementos de cada linha da matriz

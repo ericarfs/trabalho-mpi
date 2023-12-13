@@ -29,6 +29,8 @@ int main( int argc, char **argv ){
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   MPI_Comm_size( MPI_COMM_WORLD, &size );
 
+  
+
   qtd_elem = numLinhas*numColunas;
 
   rec_size = 100;
@@ -64,6 +66,7 @@ int main( int argc, char **argv ){
         }
     }
 /*
+//imprimir matriz
    for (i = 0; i < numLinhas; i++) {
         for (j = 0; j < numColunas; j++) {
           printf("%d ",matriz[i][j]);
@@ -76,6 +79,9 @@ int main( int argc, char **argv ){
   }
 
   rec_size = send_counts[rank];
+
+  vetor_rec=(int*)malloc(rec_size*sizeof(int));
+
   int rows = send_counts[rank]/numColunas;
 
   MPI_Scatterv(&matriz,send_counts,displs, MPI_INT, vetor_rec,rec_size,MPI_INT,root,MPI_COMM_WORLD);
@@ -153,9 +159,9 @@ int main( int argc, char **argv ){
 
 
   if(rank == root){   
-    /*for (i=0;i<numColunas;i++){
+    for (i=0;i<numColunas;i++){
       printf("A soma dos elementos da coluna %d é: %d\n", i, global_sum_cols[i]);
-    }*/
+    }
     printf("O maior elemento da matriz é: %d\n", global_max);
     printf("O menor elemento da matriz é: %d\n", global_min);
     printf("A soma de todos os elementos da matriz é: %d\n", global_sum);
@@ -166,6 +172,8 @@ int main( int argc, char **argv ){
 
 	
   free(vetor_rec);
+  free(send_counts);
+  free(displs);
   MPI_Finalize();
 
     
