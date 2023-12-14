@@ -25,11 +25,12 @@ int main( int argc, char **argv ){
   int *send_counts, *displs;
   int sum = 0;
 
-  double start, end; 
+  double start, end, time; 
+
+  MPI_Init( &argc, &argv ); 
 
   start = MPI_Wtime(); 
 
-  MPI_Init( &argc, &argv );
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
   MPI_Comm_size( MPI_COMM_WORLD, &size );
 
@@ -179,9 +180,12 @@ int main( int argc, char **argv ){
   free(send_counts);
   free(displs);
   
-  end = MPI_Wtime(); 
+ 
   MPI_Finalize();
 
-  
-  printf( "Elapsed time is %f\n", end - start); 
+  end = MPI_Wtime(); 
+
+  time = end - start;
+
+  printf( "Elapsed time is %f\n", time); 
 }

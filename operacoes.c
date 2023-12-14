@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     int numColunas = atoi(argv[2]);
 
 
-    double start, end; 
+    double start, end, time; 
 
     start = MPI_Wtime(); 
     // Leitura dos elementos da matriz
@@ -48,7 +48,9 @@ int main(int argc, char *argv[]) {
 
     end = MPI_Wtime(); 
 
-    printf( "Elapsed time is %f\n", end - start); 
+    time = end - start;
+
+    printf( "Elapsed time is %f\n", time); 
 
     return 0;
 }
