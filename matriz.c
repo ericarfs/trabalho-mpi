@@ -21,7 +21,7 @@ void gerarMatriz(int **matriz, int linhas, int cols) {
     int i, j;        
     for (i = 0; i < linhas; i++) {
         for (j = 0; j < cols; j++) {
-            matriz[i][j] = cols*linhas/(cols+linhas+16) + rand()%16;
+            matriz[i][j] = rand()%16;
         }
     }
 }

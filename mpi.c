@@ -13,7 +13,7 @@ int main( int argc, char **argv ){
   int numLinhas = atoi(argv[1]);
   int numColunas = atoi(argv[2]);
 
-  int matriz[numLinhas][numColunas];
+  int *matriz;
   int i, j, k;
   int qtd_elem, rank, size,rec_size=0,*vetor_rec, root=0;
   int global_min, global_max, local_sum = 0, global_sum = 0;
@@ -37,8 +37,6 @@ int main( int argc, char **argv ){
   
 
   qtd_elem = numLinhas*numColunas;
-
-  //rec_size = 100;
 
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
@@ -65,10 +63,9 @@ int main( int argc, char **argv ){
 
   //Gerar matriz pseudo aleatoria
   if(rank == root) {
-    for (i = 0; i < numLinhas; i++) {
-        for (j = 0; j < numColunas; j++) {
-          matriz[i][j] = qtd_elem/(numColunas+numLinhas+16) + rand()%16;
-        }
+    matriz = (int*)malloc(qtd_elem*sizeof(int));
+    for (i = 0; i < qtd_elem; i++) {
+        matriz[i] = rand()%16;
     }
 /*
 //imprimir matriz
@@ -88,8 +85,9 @@ int main( int argc, char **argv ){
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
   int rows = send_counts[rank]/numColunas;
+ 
 
-  MPI_Scatterv(&matriz,send_counts,displs, MPI_INT, vetor_rec,rec_size,MPI_INT,root,MPI_COMM_WORLD);
+  MPI_Scatterv(matriz,send_counts,displs, MPI_INT, vetor_rec,rec_size,MPI_INT,root,MPI_COMM_WORLD);
 
   int local_min = vetor_rec[0];
   int local_max = vetor_rec[0];
@@ -157,6 +155,7 @@ int main( int argc, char **argv ){
   MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_max, &global_max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
 
+  end = MPI_Wtime(); 
 
   //MPI_Barrier(MPI_COMM_WORLD);
 
@@ -176,6 +175,7 @@ int main( int argc, char **argv ){
 
 
 	
+  free(matriz);
   free(vetor_rec);
   free(send_counts);
   free(displs);
@@ -183,7 +183,6 @@ int main( int argc, char **argv ){
  
   MPI_Finalize();
 
-  end = MPI_Wtime(); 
 
   time = end - start;
 
