@@ -90,21 +90,9 @@ int main( int argc, char **argv ){
     for (i = 0; i < qtd_elem; i++) {
         matriz[i] = rand()%16;
     }
-/*
-//imprimir matriz
-   for (i = 0; i < numLinhas; i++) {
-        for (j = 0; j < numColunas; j++) {
-          printf("%d ",matriz[i][j]);
-        }
-        printf("\n");
-    }
-
-    printf("\n");*/
-
   }
 
   rec_size = send_counts[rank];
-
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
   int rows = send_counts[rank]/numColunas;
@@ -156,8 +144,6 @@ int main( int argc, char **argv ){
     }
 
   }
-  
- //MPI_Barrier(MPI_COMM_WORLD);
 
 
   for (i=0;i<rows;i++){
@@ -165,23 +151,12 @@ int main( int argc, char **argv ){
     printf("A soma dos elementos da linha %d é: %d\n", k, sum_rows[k]);
     
   }
- // printf("local_min = %d\n", local_min);
-  //printf("local_max = %d\n", local_max);
-    
-
- /* for(i=0;i<rec_size;i++){
-    printf("Rank:%d recebeu %d \n",rank, vetor_rec[i]);
-  }*/
 
 
   MPI_Reduce(&local_sum, &global_sum, 1, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_sum_cols, &global_sum_cols, numColunas, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_max, &global_max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
-
-  //MPI_Barrier(MPI_COMM_WORLD);
-
- 
 
 
   if(rank == root){   
@@ -208,9 +183,6 @@ int main( int argc, char **argv ){
   double time = end - start;
 
   MPI_Reduce(&time, &global_time, 1, MPI_DOUBLE, MPI_MAX, root, MPI_COMM_WORLD);
-  
-  //MPI_Barrier(MPI_COMM_WORLD);
-
 
   if(rank == root){  
     printf( "Elapsed time is %f\n", global_time);
