@@ -7,25 +7,44 @@
 #include "matriz.h"
 
 #define TAM 16
- 
-int main( int argc, char **argv ){
 
+//Função para salvar o tempo calculado em um arquivo
+void salvarArquivo(double time, int linhas, int colunas){
+  char resultFileName[50] = "resultados/TempoParalelo_";
+
+  char n[10];
+  char m[10];
+
+  sprintf(n, "%d", linhas);
+  sprintf(m, "%d", colunas);
+
+  //Criar nome do arquivo de entrada
+  strcat(resultFileName, n);
+  strcat(resultFileName, "x");
+  strcat(resultFileName, m);
+
+  FILE *resultFile = fopen(resultFileName, "a");
+
+  fprintf(resultFile, "%f\n", time);
+
+  fclose(resultFile);
+}
+
+
+int main( int argc, char **argv ){
+  
   int numLinhas = atoi(argv[1]);
   int numColunas = atoi(argv[2]);
 
   int *matriz;
-  int i, j, k;
+  int i = 0, j = 0, k = 0;
   int qtd_elem, rank, size,rec_size=0,*vetor_rec, root=0;
-  int global_min, global_max, local_sum = 0, global_sum = 0;
-  int local_sum_rows[numLinhas];
+  int global_min, global_max, global_sum;
+  int sum_rows[numLinhas];
   int global_sum_cols[numColunas];
-  int rows_per_proc; 
-  float rows_aux;
+  
 
-  int *send_counts, *displs;
-  int sum = 0;
-
-  double start, end, time; 
+  double start, end, global_time; 
 
   MPI_Init( &argc, &argv ); 
 
@@ -41,11 +60,15 @@ int main( int argc, char **argv ){
   vetor_rec=(int*)malloc(rec_size*sizeof(int));
 
   //Quantidade de elementos a serem enviados para cada processador
+  int *send_counts, *displs;
   send_counts = (int*)malloc(sizeof(int)*size); 
   displs = (int*)malloc(sizeof(int)*size);
 
   int rows_rem = numLinhas;
   int procs_rem = size;
+  int rows_per_proc; 
+  float rows_aux;
+  int sum = 0;
 
   //Calcular vetor de valores a serem enviados e deslocamentos
   for (int i = 0; i < size; i++) {
@@ -91,7 +114,8 @@ int main( int argc, char **argv ){
 
   int local_min = vetor_rec[0];
   int local_max = vetor_rec[0];
-  int sum_rows_local = 0;
+  int local_sum = 0;
+  int local_sum_rows = 0;
   int local_sum_cols[numColunas];
   k = displs[rank]/numColunas;
   j = 0;
@@ -112,13 +136,13 @@ int main( int argc, char **argv ){
 
     //Soma das linhas
     if (j<numColunas){
-      sum_rows_local += vetor_rec[i];
+      local_sum_rows += vetor_rec[i];
       j++;
     }
     if (j==numColunas){
-      local_sum_rows[k] = sum_rows_local;
+      sum_rows[k] = local_sum_rows;
       k++;
-      sum_rows_local = 0;
+      local_sum_rows = 0;
       j = 0;
     }
       
@@ -138,7 +162,7 @@ int main( int argc, char **argv ){
 
   for (i=0;i<rows;i++){
     k = displs[rank]/numColunas + i;
-    printf("A soma dos elementos da linha %d é: %d\n", k, local_sum_rows[k]);
+    printf("A soma dos elementos da linha %d é: %d\n", k, sum_rows[k]);
     
   }
  // printf("local_min = %d\n", local_min);
@@ -154,8 +178,6 @@ int main( int argc, char **argv ){
   MPI_Reduce(&local_sum_cols, &global_sum_cols, numColunas, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_max, &global_max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
-
-  end = MPI_Wtime(); 
 
   //MPI_Barrier(MPI_COMM_WORLD);
 
@@ -179,12 +201,23 @@ int main( int argc, char **argv ){
   free(vetor_rec);
   free(send_counts);
   free(displs);
+
+  end = MPI_Wtime(); 
+
+
+  double time = end - start;
+
+  MPI_Reduce(&time, &global_time, 1, MPI_DOUBLE, MPI_MAX, root, MPI_COMM_WORLD);
   
+  //MPI_Barrier(MPI_COMM_WORLD);
+
+
+  if(rank == root){  
+    printf( "Elapsed time is %f\n", global_time);
+    salvarArquivo(global_time, numLinhas, numColunas);
+  }
+
+
  
   MPI_Finalize();
-
-
-  time = end - start;
-
-  printf( "Elapsed time is %f\n", time); 
 }

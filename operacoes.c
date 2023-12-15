@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <mpi.h>
 
 #include "matriz.h"
@@ -7,10 +8,21 @@
 
 // Função principal
 int main(int argc, char *argv[]) {
-    
-    int numLinhas = atoi(argv[1]);
-    int numColunas = atoi(argv[2]);
 
+    char *n = argv[1];
+    char *m = argv[2];
+    
+    int numLinhas = atoi(n);
+    int numColunas = atoi(m);
+
+    char resultFileName[50] = "resultados/TempoSequencial_";
+
+    //Criar nome do arquivo de entrada
+    strcat(resultFileName, n);
+    strcat(resultFileName, "x");
+    strcat(resultFileName, m);
+
+    FILE *resultFile = fopen(resultFileName, "a");
 
     double start, end, time; 
 
@@ -49,6 +61,13 @@ int main(int argc, char *argv[]) {
     end = MPI_Wtime(); 
 
     time = end - start;
+
+    fprintf(resultFile, "%f\n", time);
+
+    fclose(resultFile);
+
+    printf("%s \n", resultFileName);
+
 
     printf( "Elapsed time is %f\n", time); 
 
