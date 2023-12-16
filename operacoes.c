@@ -1,3 +1,18 @@
+/*
+TRABALHO PRÁTICO 2 - Paralelização com MPI
+Disciplina: SSC0903 - Computação de Alto Desempenho
+Estudantes: 
+----Erica Ribeiro Filgueira dos Santos  - 11836351
+----Susy da Costa Dutra                 - 12694007 
+----Théo da Mota dos Santos             - 10691331
+
+Para compilar:
+    mpicc -o main  operacoes.c matriz.c
+Para rodar:
+    ./main <num_linhas> <num_colunas>
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
