@@ -8,8 +8,6 @@
 
 #include "matriz.h"
 
-//#define ROWS 40000
-//#define COLS 40000
 
 //Função para salvar o tempo calculado em um arquivo
 void salvarArquivo(double time, int linhas, int colunas){
