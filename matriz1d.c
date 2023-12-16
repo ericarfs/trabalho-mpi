@@ -125,13 +125,14 @@ int main(int argc, char *argv[]) {
         free(matriz);
     }
     
-    
-
-    MPI_Finalize();
-
     end = MPI_Wtime(); 
 
     time = end - start;
+
+
+    MPI_Finalize();
+
+    
 
     printf( "Elapsed time is %f\n", time); 
 
