@@ -3,16 +3,42 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <mpi.h>
 
 #include "matriz.h"
 
-#define ROWS 1000
-#define COLS 1000
+//#define ROWS 40000
+//#define COLS 40000
+
+//Função para salvar o tempo calculado em um arquivo
+void salvarArquivo(double time, int linhas, int colunas){
+  char resultFileName[50] = "resultados/TempoParalelo_";
+
+  char n[10];
+  char m[10];
+
+  sprintf(n, "%d", linhas);
+  sprintf(m, "%d", colunas);
+
+  //Criar nome do arquivo de entrada
+  strcat(resultFileName, n);
+  strcat(resultFileName, "x");
+  strcat(resultFileName, m);
+
+  FILE *resultFile = fopen(resultFileName, "a");
+
+  fprintf(resultFile, "%f\n", time);
+
+  fclose(resultFile);
+}
+
 
 int main(int argc, char *argv[]) {
-    double start, end, time; 
+    double start, end, time, global_time; 
 
+    int ROWS = atoi(argv[1]);
+    int COLS = atoi(argv[2]);
     
     int rank, nprocs;
     MPI_Init(&argc, &argv);
@@ -38,10 +64,10 @@ int main(int argc, char *argv[]) {
     if(ROWS % 2 != 0 && rank == nprocs - 1 && nprocs > 1) // assim o último processo "pega" a linha faltante, se o número de colunas for ímpar
         chunk_size += 1;
 
-    int local_chunk[chunk_size * COLS];
+    int *local_chunk = malloc(sizeof(int) * chunk_size * COLS);
 
-    int send_counts[nprocs];
-    int displs[nprocs];
+    int *send_counts = malloc(sizeof(int) * nprocs);
+    int *displs  = malloc(sizeof(int) * nprocs);
 
     if(rank == 0){
         for(int i = 0; i < nprocs; i++){
@@ -123,18 +149,24 @@ int main(int argc, char *argv[]) {
 
     if(rank == 0){
         free(matriz);
+        free(local_chunk);
+        free(send_counts);
+        free(displs);
     }
     
     end = MPI_Wtime(); 
 
     time = end - start;
 
+    MPI_Reduce(&time, &global_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+    if(rank == 0){  
+        printf( "Elapsed time is %f\n", global_time);
+        salvarArquivo(global_time, ROWS, COLS);
+    }
+
 
     MPI_Finalize();
-
-    
-
-    printf( "Elapsed time is %f\n", time); 
 
     return 0;
 }
