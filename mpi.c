@@ -24,19 +24,25 @@ Para rodar:
 #define TAM 16
 
 //Função para salvar o tempo calculado em um arquivo
-void salvarArquivo(double time, int linhas, int colunas){
-  char resultFileName[50] = "resultados/TempoParalelo_";
+void salvarArquivo(double time, int linhas, int colunas, int nprocs){
+  char resultFileName[70] = "resultados/TempoParalelo_";
 
   char n[10];
   char m[10];
+  char p[2];
 
   sprintf(n, "%d", linhas);
   sprintf(m, "%d", colunas);
+  sprintf(p, "%d", nprocs);
 
   //Criar nome do arquivo de entrada
   strcat(resultFileName, n);
   strcat(resultFileName, "x");
   strcat(resultFileName, m);
+  strcat(resultFileName, "_NP");
+  strcat(resultFileName, p);
+  strcat(resultFileName, ".txt");
+
 
   FILE *resultFile = fopen(resultFileName, "a");
 
@@ -201,7 +207,7 @@ int main( int argc, char **argv ){
 
   if(rank == root){  
     printf( "Elapsed time is %f\n", global_time);
-    salvarArquivo(global_time, numLinhas, numColunas);
+    salvarArquivo(global_time, numLinhas, numColunas, size);
   }
 
 

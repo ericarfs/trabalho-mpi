@@ -1,5 +1,18 @@
-// to compile: mpicc matriz1d.c -o matriz1d -fopenmp
-// to execute: mpirun -np 2 matriz1d
+/*
+TRABALHO PRÁTICO 2 - Paralelização com MPI
+Disciplina: SSC0903 - Computação de Alto Desempenho
+Estudantes: 
+----Erica Ribeiro Filgueira dos Santos  - 11836351
+----Susy da Costa Dutra                 - 12694007 
+----Théo da Mota dos Santos             - 10691331
+
+Para compilar:
+    mpicc matriz1d.c -o matriz1d
+Para rodar:
+    mpirun -np <num_proc> matriz1d <num_linhas> <num_colunas>
+
+*/
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,6 +66,9 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < ROWS * COLS; i++)
             matriz[i] = rand() % 16;
 
+        for (int i = 0; i < ROWS * COLS; i++)
+            printf("%d ", matriz[i]);
+        printf("\n");
         //print_matriz(matriz, ROWS, COLS);
     }
 

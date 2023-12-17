@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
     strcat(resultFileName, n);
     strcat(resultFileName, "x");
     strcat(resultFileName, m);
+    strcat(resultFileName, ".txt");
+
 
     FILE *resultFile = fopen(resultFileName, "a");
 
