@@ -83,9 +83,6 @@ int main(int argc, char *argv[]) {
 
     fclose(resultFile);
 
-    printf("%s \n", resultFileName);
-
-
     printf( "Elapsed time is %f\n", time); 
 
     return 0;
