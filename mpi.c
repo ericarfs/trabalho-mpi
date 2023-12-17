@@ -109,7 +109,7 @@ int main( int argc, char **argv ){
   if(rank == root) {
     matriz = (int*)malloc(qtd_elem*sizeof(int));
     for (i = 0; i < qtd_elem; i++) {
-        matriz[i] = rand()%16;
+        matriz[i] = 1 + rand()%2;
     }
   }
 
