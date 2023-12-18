@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
     printf("O menor elemento da matriz é: %d\n", matriz->menorElemento);
 
     // Impressão da soma de todos os elementos da matriz
-    printf("A soma de todos os elementos da matriz é: %d\n", matriz->somaElementos);
+    printf("A soma de todos os elementos da matriz é: %ld\n", matriz->somaElementos);
 
     freeMatriz(matriz,numLinhas,numColunas);
 

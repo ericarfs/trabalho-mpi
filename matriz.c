@@ -72,7 +72,7 @@ void maior_menor_elemento(matriz_t *m, int linhas, int cols) {
 
 // Função para calcular a soma de todos os elementos da matriz
 void soma_total(matriz_t *m, int linhas, int cols) {
-    int soma = 0;
+    unsigned long soma = 0;
     int i, j;
 
     for (i = 0; i < linhas; i++) {

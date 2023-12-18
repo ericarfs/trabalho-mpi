@@ -60,7 +60,8 @@ int main( int argc, char **argv ){
   int *matriz;
   int i = 0, j = 0, k = 0;
   int qtd_elem, rank, size,rec_size=0,*vetor_rec, root=0;
-  int global_min, global_max, global_sum;
+  int global_min, global_max;
+  unsigned long global_sum;
   int sum_rows[numLinhas];
   int global_sum_cols[numColunas];
   
@@ -123,7 +124,7 @@ int main( int argc, char **argv ){
 
   int local_min = vetor_rec[0];
   int local_max = vetor_rec[0];
-  int local_sum = 0;
+  unsigned long local_sum = 0;
   int local_sum_rows = 0;
   int local_sum_cols[numColunas];
   k = displs[rank]/numColunas;
@@ -174,7 +175,7 @@ int main( int argc, char **argv ){
   }
 
 
-  MPI_Reduce(&local_sum, &global_sum, 1, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
+  MPI_Reduce(&local_sum, &global_sum, 1, MPI_DOUBLE, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_sum_cols, &global_sum_cols, numColunas, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, root, MPI_COMM_WORLD);
   MPI_Reduce(&local_max, &global_max, 1, MPI_INT, MPI_MAX, root, MPI_COMM_WORLD);
@@ -186,7 +187,7 @@ int main( int argc, char **argv ){
     }
     printf("O maior elemento da matriz é: %d\n", global_max);
     printf("O menor elemento da matriz é: %d\n", global_min);
-    printf("A soma de todos os elementos da matriz é: %d\n", global_sum);
+    printf("A soma de todos os elementos da matriz é: %ld\n", global_sum);
 
     
   }

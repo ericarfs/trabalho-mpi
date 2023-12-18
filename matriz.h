@@ -8,7 +8,7 @@ typedef struct {
     int **matriz;
     int maiorElemento;
     int menorElemento;
-    int somaElementos;
+    unsigned long somaElementos;
     int *somaLinhas;
     int *somaColunas;
 }matriz_t; 
